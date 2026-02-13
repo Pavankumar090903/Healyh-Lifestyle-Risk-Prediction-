@@ -1,0 +1,954 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="dashboard-wrapper-fullwidth">
+    <!-- Top Section: Title + Horizontal Slicers -->
+    <div class="top-header-section">
+        <!-- Title Row -->
+        <div class="title-row">
+            <h3 class="main-dashboard-title">
+                <i class="bi bi-heart-pulse-fill text-danger me-2"></i>
+                Health & Lifestyle Risk Prediction and Wellness Analytics Dashboard
+            </h3>
+            <div class="header-meta">
+                <div class="status-indicator">
+                    <span class="pulse-dot"></span>
+                    <span class="status-text">LIVE ANALYTICS</span>
+                </div>
+                <div class="update-badge mt-2">
+                    <i class="bi bi-clock-history me-1"></i>
+                    Last Refresh: <span id="lastUpdated">Just now</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Horizontal Slicers Row -->
+        <div class="slicers-horizontal-bar" id="slicerBar">
+            <div class="slicer-toggle-section">
+                <button class="filter-toggle-btn active" id="filterToggle" onclick="toggleFilters()">
+                    <i class="bi bi-funnel-fill" id="toggleIcon"></i>
+                    <span id="toggleText">Filters: ON</span>
+                </button>
+            </div>
+            <div class="slicer-controls-horizontal" id="slicerControls">
+                <div class="slicer-item-h">
+                    <label>AGE RANGE</label>
+                    <select class="form-select form-select-sm" id="filterAge" onchange="updateDashboard()">
+                        <option value="All">All Ages</option>
+                        <option>0-20</option>
+                        <option>21-40</option>
+                        <option>41-60</option>
+                        <option>61+</option>
+                    </select>
+                </div>
+                <div class="slicer-item-h">
+                    <label>GENDER</label>
+                    <select class="form-select form-select-sm" id="filterGender" onchange="updateDashboard()">
+                        <option value="All">All Genders</option>
+                        <option>Male</option>
+                        <option>Female</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+                <div class="slicer-item-h">
+                    <label>DIABETES STAGE</label>
+                    <select class="form-select form-select-sm" id="filterStage" onchange="updateDashboard()">
+                        <option value="All">All Stages</option>
+                        <option>No Diabetes</option>
+                        <option>Pre-Diabetes</option>
+                        <option>Type 2</option>
+                        <option>Type 1</option>
+                    </select>
+                </div>
+                <div class="slicer-item-h">
+                    <label>EDUCATION</label>
+                    <select class="form-select form-select-sm" id="filterEducation" onchange="updateDashboard()">
+                        <option value="All">All Levels</option>
+                        <option>Highschool</option>
+                        <option>Graduate</option>
+                        <option>Postgraduate</option>
+                        <option>No formal</option>
+                    </select>
+                </div>
+                <div class="slicer-item-h">
+                    <label>ETHNICITY</label>
+                    <select class="form-select form-select-sm" id="filterEthnicity" onchange="updateDashboard()">
+                        <option value="All">All Ethnicities</option>
+                        <option>Asian</option>
+                        <option>White</option>
+                        <option>Hispanic</option>
+                        <option>Black</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+                <div class="slicer-item-h">
+                    <label>INCOME</label>
+                    <select class="form-select form-select-sm" id="filterIncome" onchange="updateDashboard()">
+                        <option value="All">All Incomes</option>
+                        <option>Low</option>
+                        <option>Lower-Middle</option>
+                        <option>Middle</option>
+                        <option>Upper-Middle</option>
+                        <option>High</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="dashboard-main-content">
+        <!-- PERSONAL JOURNEY SECTION (ENHANCED) -->
+        <div id="personalJourneySection" class="personal-journey-container animate-fade-in-up" style="display: none;">
+            <div class="section-divider">
+                <i class="bi bi-person-badge-fill me-2 text-primary"></i>
+                Your Health Journey & Current Status
+            </div>
+
+            <!-- Latest Stats Cards -->
+            <div class="row g-4 mb-4" id="personalStatsRow">
+                <div class="col-md-3">
+                    <div class="kpi-card kpi-risk-elevated">
+                        <div class="kpi-content">
+                            <div class="kpi-label">Current Risk</div>
+                            <div class="kpi-value" id="userLatestRisk">--%</div>
+                        </div>
+                        <div class="kpi-icon"><i class="bi bi-shield-exclamation"></i></div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="kpi-card">
+                        <div class="kpi-content">
+                            <div class="kpi-label">Glucose Level</div>
+                            <div class="kpi-value" id="userLatestGlucose">--</div>
+                        </div>
+                        <div class="kpi-icon text-danger"><i class="bi bi-droplet-fill"></i></div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="kpi-card">
+                        <div class="kpi-content">
+                            <div class="kpi-label">HbA1c</div>
+                            <div class="kpi-value" id="userLatestHba1c">--</div>
+                        </div>
+                        <div class="kpi-icon text-info"><i class="bi bi-activity"></i></div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="kpi-card">
+                        <div class="kpi-content">
+                            <div class="kpi-label">BMI</div>
+                            <div class="kpi-value" id="userLatestBmi">--</div>
+                        </div>
+                        <div class="kpi-icon text-success"><i class="bi bi-body-text"></i></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="personal-charts-row">
+                <div class="chart-card chart-medium animate-fade-in-up delay-1">
+                    <div class="chart-header">Your Risk Progress</div>
+                    <div id="personalRiskChart" class="chart-body" style="min-height: 350px;"></div>
+                </div>
+                <div class="chart-card chart-medium animate-fade-in-up delay-2">
+                    <div class="chart-header">Vitals History</div>
+                    <div id="personalVitalsChart" class="chart-body" style="min-height: 350px;"></div>
+                </div>
+            </div>
+
+
+        </div>
+
+
+        <div class="section-divider">
+            <i class="bi bi-globe-americas me-2 text-info"></i>
+            Population Analysis (Static Dataset)
+        </div>
+
+        <!-- KPI Row -->
+        <div class="kpi-row">
+            <div class="kpi-card kpi-primary">
+                <div class="kpi-icon"><i class="bi bi-people-fill"></i></div>
+                <div class="kpi-content">
+                    <div class="kpi-label">Total Patients</div>
+                    <div class="kpi-value" id="kpiTotal">0</div>
+                </div>
+            </div>
+            <div class="kpi-card kpi-info">
+                <div class="kpi-icon"><i class="bi bi-activity"></i></div>
+                <div class="kpi-content">
+                    <div class="kpi-label">Avg HbA1c</div>
+                    <div class="kpi-value" id="kpiHba1c">0</div>
+                </div>
+            </div>
+            <div class="kpi-card kpi-danger">
+                <div class="kpi-icon"><i class="bi bi-exclamation-triangle-fill"></i></div>
+                <div class="kpi-content">
+                    <div class="kpi-label">Type 2 Cases</div>
+                    <div class="kpi-value" id="kpiHighRisk">0</div>
+                </div>
+            </div>
+            <div class="kpi-card kpi-success">
+                <div class="kpi-icon"><i class="bi bi-heart-pulse-fill"></i></div>
+                <div class="kpi-content">
+                    <div class="kpi-label">Avg BMI</div>
+                    <div class="kpi-value" id="kpiBmi">0</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Grid -->
+        <div class="charts-grid">
+            <!-- Row 1: Age and Gender side-by-side -->
+            <div class="chart-card chart-medium">
+                <div class="chart-header">Age Distribution</div>
+                <div id="c1" class="chart-body"></div>
+            </div>
+            <div class="chart-card chart-medium">
+                <div class="chart-header">Gender Mix</div>
+                <div id="c3" class="chart-body"></div>
+            </div>
+
+            <!-- Row 2: Full width BMI vs HbA1c -->
+            <div class="chart-card chart-full">
+                <div class="chart-header">BMI vs HbA1c Correlation</div>
+                <div id="c2" class="chart-body"></div>
+            </div>
+
+            <!-- Row 3: Patient Stages and Blood Pressure -->
+            <div class="chart-card chart-medium">
+                <div class="chart-header">Patient Stages</div>
+                <div id="c4" class="chart-body"></div>
+            </div>
+            <div class="chart-card chart-medium">
+                <div class="chart-header">Blood Pressure Map</div>
+                <div id="c5" class="chart-body"></div>
+            </div>
+
+            <!-- Row 4: Activity and Glucose -->
+            <div class="chart-card chart-medium">
+                <div class="chart-header">Activity vs Risk</div>
+                <div id="c6" class="chart-body"></div>
+            </div>
+            <div class="chart-card chart-medium">
+                <div class="chart-header">Glucose Trends</div>
+                <div id="c8" class="chart-body"></div>
+            </div>
+
+            <!-- Row 5: 3 small charts -->
+            <div class="chart-card chart-small">
+                <div class="chart-header">Cholesterol</div>
+                <div id="c7" class="chart-body"></div>
+            </div>
+            <div class="chart-card chart-small">
+                <div class="chart-header">Family History</div>
+                <div id="c9" class="chart-body"></div>
+            </div>
+            <div class="chart-card chart-small">
+                <div class="chart-header">Risk Score Density</div>
+                <div id="c10" class="chart-body"></div>
+            </div>
+
+            <!-- Row 6: Ethnicity and Smoking side-by-side -->
+            <div class="chart-card chart-medium">
+                <div class="chart-header">Ethnicity Breakdown</div>
+                <div id="c11" class="chart-body"></div>
+            </div>
+            <div class="chart-card chart-medium">
+                <div class="chart-header">Smoking Status vs Risk</div>
+                <div id="c12" class="chart-body"></div>
+            </div>
+
+            <!-- Row 7: Diet and Sleep side-by-side -->
+            <div class="chart-card chart-medium">
+                <div class="chart-header">Diet Score Distribution</div>
+                <div id="c13" class="chart-body"></div>
+            </div>
+            <div class="chart-card chart-medium">
+                <div class="chart-header">Sleep Patterns</div>
+                <div id="c14" class="chart-body"></div>
+            </div>
+
+            <!-- Row 8: Education and Employment side-by-side -->
+            <div class="chart-card chart-medium">
+                <div class="chart-header">Education Level</div>
+                <div id="c15" class="chart-body"></div>
+            </div>
+            <div class="chart-card chart-medium">
+                <div class="chart-header">Employment Status</div>
+                <div id="c16" class="chart-body"></div>
+            </div>
+
+            <!-- Row 9: Insulin Levels Full Width -->
+            <div class="chart-card chart-full">
+                <div class="chart-header">Insulin Levels vs Risk</div>
+                <div id="c17" class="chart-body"></div>
+            </div>
+
+            <!-- Row 10: Risk Factor Importance Full Width -->
+            <div class="chart-card chart-full">
+                <div class="chart-header">Risk Factor Importance Analysis</div>
+                <div id="c18" class="chart-body"></div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Loading Overlay -->
+<div id="loadingOverlay" class="loading-overlay">
+    <div class="spinner-border text-light" role="status"></div>
+    <div class="text-light mt-2">Updating dashboard...</div>
+</div>
+
+<script src="https://cdn.plot.ly/plotly-2.28.0.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+<script>
+    function waitForPlotly() {
+        return new Promise((resolve) => {
+            if (typeof Plotly !== 'undefined') {
+                resolve();
+            } else {
+                const checkPlotly = setInterval(() => {
+                    if (typeof Plotly !== 'undefined') {
+                        clearInterval(checkPlotly);
+                        resolve();
+                    }
+                }, 100);
+            }
+        });
+    }
+
+    let filtersEnabled = true;
+
+    function toggleFilters() {
+        filtersEnabled = !filtersEnabled;
+        const btn = document.getElementById("filterToggle");
+        const icon = document.getElementById("toggleIcon");
+        const text = document.getElementById("toggleText");
+        const controls = document.getElementById("slicerControls");
+
+        if (filtersEnabled) {
+            btn.classList.add("active");
+            icon.className = "bi bi-funnel-fill";
+            text.innerText = "Filters: ON";
+            controls.style.opacity = "1";
+            controls.style.pointerEvents = "auto";
+        } else {
+            btn.classList.remove("active");
+            icon.className = "bi bi-funnel";
+            text.innerText = "Filters: OFF";
+            controls.style.opacity = "0.5";
+            controls.style.pointerEvents = "none";
+        }
+        updateDashboard();
+    }
+
+    document.addEventListener("DOMContentLoaded", async () => {
+        await waitForPlotly();
+        updateDashboard();
+        loadPersonalHistory();
+    });
+
+    async function loadPersonalHistory() {
+        try {
+            const res = await fetch("/api/personal-history");
+            const data = await res.json();
+
+            if (data.has_data) {
+                document.getElementById("personalJourneySection").style.display = "block";
+
+                // Update Personal KPIs
+                document.getElementById("userLatestRisk").innerText = data.latest_stats.score + "%";
+                document.getElementById("userLatestGlucose").innerText = data.latest_stats.glucose;
+                document.getElementById("userLatestHba1c").innerText = data.latest_stats.hba1c;
+                document.getElementById("userLatestBmi").innerText = data.latest_stats.bmi;
+
+                // Update Risk Card Color based on score
+                const riskCard = document.querySelector(".kpi-risk-elevated");
+                if (data.latest_stats.score > 70) {
+                    riskCard.style.borderLeft = "4px solid #f43f5e";
+                    riskCard.querySelector(".kpi-value").style.color = "#f43f5e";
+                } else if (data.latest_stats.score > 40) {
+                    riskCard.style.borderLeft = "4px solid #fbbf24";
+                    riskCard.querySelector(".kpi-value").style.color = "#fbbf24";
+                } else {
+                    riskCard.style.borderLeft = "4px solid #10b981";
+                    riskCard.querySelector(".kpi-value").style.color = "#10b981";
+                }
+
+                const config = { responsive: true, displayModeBar: false };
+                Plotly.newPlot("personalRiskChart", data.charts.risk_trend.data, data.charts.risk_trend.layout, config);
+                Plotly.newPlot("personalVitalsChart", data.charts.vitals_trend.data, data.charts.vitals_trend.layout, config);
+            }
+        } catch (e) {
+            console.error("Failed to load personal history:", e);
+        }
+    }
+
+
+    async function updateDashboard() {
+        const overlay = document.getElementById("loadingOverlay");
+        overlay.style.display = "flex";
+
+        try {
+            let url = "/api/dashboard/filter";
+
+            if (filtersEnabled) {
+                const age = document.getElementById("filterAge").value;
+                const gender = document.getElementById("filterGender").value;
+                const stage = document.getElementById("filterStage").value;
+                const education = document.getElementById("filterEducation").value;
+                const ethnicity = document.getElementById("filterEthnicity").value;
+                const income = document.getElementById("filterIncome").value;
+                url += `?age=${age}&gender=${gender}&diabetes_stage=${stage}&education=${education}&ethnicity=${ethnicity}&income=${income}`;
+            } else {
+                // If filters are off, we fetch the "All" set
+                url += `?age=All&gender=All&diabetes_stage=All&education=All&ethnicity=All&income=All`;
+            }
+
+            const res = await fetch(url);
+            const data = await res.json();
+
+            console.log("Dashboard data received:", data);
+
+            // Update KPIs with animation
+            animateValue("kpiTotal", 0, data.kpi.total, 800);
+            animateValue("kpiHba1c", 0, data.kpi.avg_hba1c, 800);
+            animateValue("kpiHighRisk", 0, data.kpi.high_risk, 800);
+            animateValue("kpiBmi", 0, data.kpi.avg_bmi, 800);
+
+            document.getElementById("lastUpdated").innerText = new Date().toLocaleTimeString();
+
+            // Render all 18 charts
+            const config = { responsive: true, displayModeBar: false };
+            const charts = data.charts;
+
+            console.log("Rendering charts...", Object.keys(charts));
+
+            for (let i = 1; i <= 18; i++) {
+                const key = `c${i}`;
+                const container = document.getElementById(key);
+
+                if (!container) {
+                    console.error(`Container ${key} not found!`);
+                    continue;
+                }
+
+                if (charts[key] && charts[key].data) {
+                    console.log(`Rendering chart ${key}...`);
+                    try {
+                        const layout = Object.assign({}, charts[key].layout);
+                        layout.autosize = true;
+                        await Plotly.newPlot(key, charts[key].data, layout, config);
+                        console.log(`Chart ${key} rendered successfully`);
+                    } catch (err) {
+                        console.error(`Error rendering chart ${key}:`, err);
+                    }
+                } else {
+                    console.warn(`No data for chart ${key}`);
+                }
+            }
+        } catch (e) {
+            console.error("Dashboard update failed:", e);
+            alert("Failed to load dashboard data: " + e.message);
+        } finally {
+            overlay.style.display = "none";
+        }
+    }
+
+    function animateValue(id, start, end, duration) {
+        const element = document.getElementById(id);
+        const range = end - start;
+        const increment = range / (duration / 16);
+        let current = start;
+
+        const timer = setInterval(() => {
+            current += increment;
+            if ((increment > 0 && current >= end) || (increment < 0 && current <= end)) {
+                current = end;
+                clearInterval(timer);
+            }
+            element.textContent = typeof end === 'number' && end % 1 !== 0
+                ? current.toFixed(1)
+                : Math.round(current).toLocaleString();
+        }, 16);
+    }
+
+
+
+
+</script>
+
+<style>
+    /* Midnight Mesh Dashboard Background - Static & Clean */
+    .dashboard-wrapper-fullwidth {
+        min-height: 100vh;
+        background: #0f172a;
+        /* Deep, professional Navy background */
+        margin: -24px -12px;
+        padding: 0;
+        position: relative;
+    }
+
+    /* Subtle top-light effect */
+    .dashboard-wrapper-fullwidth::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.1) 0%, transparent 60%);
+        pointer-events: none;
+    }
+
+
+    /* Unified Header with Glassmorphism */
+    .top-header-section {
+        background: rgba(15, 23, 42, 0.6);
+        /* Transparent Navy matching background */
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+    }
+
+    /* Title Row */
+    .title-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 30px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .main-dashboard-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #ffffff;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        margin: 0;
+    }
+
+    /* Header Meta Enhancements */
+    .header-meta {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 8px;
+    }
+
+    .status-indicator {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(16, 185, 129, 0.1);
+        padding: 4px 12px;
+        border-radius: 20px;
+        border: 1px solid rgba(16, 185, 129, 0.2);
+    }
+
+    .pulse-dot {
+        width: 8px;
+        height: 8px;
+        background: #10b981;
+        border-radius: 50%;
+        box-shadow: 0 0 0 rgba(16, 185, 129, 0.4);
+        animation: pulseEffect 2s infinite;
+    }
+
+    .status-text {
+        font-size: 0.65rem;
+        font-weight: 800;
+        color: #10b981;
+        letter-spacing: 1px;
+    }
+
+    .update-badge {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #ffffff;
+        background: rgba(255, 255, 255, 0.05);
+        padding: 4px 12px;
+        border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    #lastUpdated {
+        color: #4facfe;
+    }
+
+    @keyframes pulseEffect {
+        0% {
+            box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+        }
+
+        70% {
+            box-shadow: 0 0 0 10px rgba(16, 185, 129, 0);
+        }
+
+        100% {
+            box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+        }
+    }
+
+    /* Filter Toggle Button */
+    .slicer-toggle-section {
+        padding-right: 20px;
+        border-right: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .filter-toggle-btn {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 20px;
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.05);
+        color: #a0aec0;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        white-space: nowrap;
+    }
+
+    .filter-toggle-btn i {
+        font-size: 1.1rem;
+    }
+
+    .filter-toggle-btn.active {
+        background: rgba(79, 172, 254, 0.15);
+        border-color: rgba(79, 172, 254, 0.4);
+        color: #4facfe;
+        box-shadow: 0 0 15px rgba(79, 172, 254, 0.2);
+    }
+
+    .filter-toggle-btn:hover {
+        transform: translateY(-2px);
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    /* Horizontal Slicers Bar */
+    .slicers-horizontal-bar {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        padding: 15px 30px;
+        background: rgba(255, 255, 255, 0.02);
+    }
+
+    .slicer-icon-section {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 700;
+        color: #4facfe;
+        font-size: 1.1rem;
+        padding-right: 20px;
+        border-right: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .slicer-icon-section i {
+        font-size: 1.3rem;
+    }
+
+    .slicer-controls-horizontal {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        flex: 1;
+    }
+
+    .slicer-item-h {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .slicer-item-h label {
+        font-size: 0.7rem;
+        font-weight: 700;
+        color: #a0aec0;
+        margin: 0;
+        letter-spacing: 0.5px;
+    }
+
+    .slicer-item-h select {
+        min-width: 140px;
+        background: rgba(255, 255, 255, 0.05);
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .slicer-item-h select option {
+        background: #1a202c;
+    }
+
+    /* Main Content */
+    .dashboard-main-content {
+        padding: 24px;
+    }
+
+    .section-divider {
+        display: flex;
+        align-items: center;
+        font-size: 1.1rem;
+        font-weight: 800;
+        color: #ffffff;
+        margin: 20px 0;
+        padding-bottom: 10px;
+        border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .personal-journey-container {
+        margin-bottom: 40px;
+        background: rgba(99, 102, 241, 0.05);
+        padding: 20px;
+        border-radius: 20px;
+        border: 1px dashed rgba(99, 102, 241, 0.3);
+    }
+
+    .personal-charts-row {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+
+    /* KPI Cards */
+    .kpi-row {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+        margin-bottom: 24px;
+    }
+
+    /* KPI Cards with Glassmorphism */
+    .kpi-card {
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .kpi-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 100%);
+        pointer-events: none;
+    }
+
+    .kpi-card:hover {
+        transform: translateY(-8px) scale(1.02);
+        background: rgba(255, 255, 255, 0.07);
+        border-color: rgba(255, 255, 255, 0.2);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .kpi-primary {
+        color: #667eea;
+    }
+
+    .kpi-info {
+        color: #3182ce;
+    }
+
+    .kpi-danger {
+        color: #e53e3e;
+    }
+
+    .kpi-success {
+        color: #38a169;
+    }
+
+    /* Vibrant KPI Icons */
+    .kpi-icon {
+        font-size: 2.2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 60px;
+        height: 60px;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.05);
+        /* Soft background for icon */
+        transition: all 0.3s ease;
+    }
+
+    .kpi-primary .kpi-icon {
+        color: #6366f1;
+        background: rgba(99, 102, 241, 0.1);
+    }
+
+    .kpi-info .kpi-icon {
+        color: #0ea5e9;
+        background: rgba(14, 165, 233, 0.1);
+    }
+
+    .kpi-danger .kpi-icon {
+        color: #f43f5e;
+        background: rgba(244, 63, 94, 0.1);
+    }
+
+    .kpi-success .kpi-icon {
+        color: #10b981;
+        background: rgba(16, 185, 129, 0.1);
+    }
+
+    .kpi-content {
+        flex: 1;
+    }
+
+    .kpi-label {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: #718096;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 4px;
+    }
+
+    .kpi-value {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: #ffffff;
+    }
+
+    /* Charts Grid */
+    .charts-grid {
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        gap: 24px;
+    }
+
+    /* Chart Cards with Glassmorphism */
+    .chart-card {
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .chart-card:hover {
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(255, 255, 255, 0.2);
+        transform: translateY(-5px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    .chart-header {
+        padding: 16px 20px;
+        background: rgba(255, 255, 255, 0.05);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        font-weight: 700;
+        color: #ffffff;
+        font-size: 0.95rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .chart-body {
+        padding: 10px;
+        min-height: 450px;
+        height: auto;
+    }
+
+    .chart-full {
+        grid-column: span 12;
+    }
+
+    .chart-large {
+        grid-column: span 8;
+    }
+
+    .chart-medium {
+        grid-column: span 6;
+    }
+
+    .chart-small {
+        grid-column: span 4;
+    }
+
+    /* Loading Overlay */
+    .loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(30, 30, 46, 0.85);
+        display: none;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        backdrop-filter: blur(4px);
+    }
+
+    /* Responsive */
+    @media (max-width: 1200px) {
+        .kpi-row {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .chart-large,
+        .chart-medium {
+            grid-column: span 12;
+        }
+
+        .chart-small {
+            grid-column: span 6;
+        }
+
+        .slicer-controls-horizontal {
+            flex-wrap: wrap;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .kpi-row {
+            grid-template-columns: 1fr;
+        }
+
+        .chart-small {
+            grid-column: span 12;
+        }
+
+        .title-row {
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .slicers-horizontal-bar {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .slicer-icon-section {
+            border-right: none;
+            border-bottom: 2px solid #cbd5e0;
+            padding-bottom: 10px;
+        }
+    }
+</style>
+{% endblock %}

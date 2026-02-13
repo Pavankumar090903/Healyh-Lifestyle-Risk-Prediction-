@@ -1,0 +1,367 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid py-4 px-md-5">
+    <!-- Admin Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4 animate-fade-in-up">
+        <div>
+            <h1 class="h2 fw-bold text-dark mb-0">Dashboard</h1>
+        </div>
+        <div class="d-flex gap-2">
+            <button class="btn btn-outline-primary rounded-pill px-4 fw-bold" onclick="refreshData()">
+                <i class="fas fa-sync-alt me-2"></i>Refresh Data
+            </button>
+            <div class="admin-badge bg-primary text-white rounded-pill px-3 py-1">
+                <i class="fas fa-user-shield me-2"></i>Administrator
+            </div>
+        </div>
+    </div>
+
+
+    <!-- KPI Overview -->
+    <div class="row g-4 mb-4 animate-fade-in-up delay-1">
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm rounded-4 h-100 hover-lift">
+                <div class="card-body p-4 text-center">
+                    <div class="icon-shape bg-soft-primary text-primary rounded-circle mb-3 mx-auto">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h6 class="text-muted small text-uppercase fw-bold mb-1">Total Registered</h6>
+                    <h2 class="fw-bold mb-0" id="stat-total">0</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm rounded-4 h-100 hover-lift">
+                <div class="card-body p-4 text-center">
+                    <div class="icon-shape bg-soft-danger text-danger rounded-circle mb-3 mx-auto">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <h6 class="text-muted small text-uppercase fw-bold mb-1">High Risk Alerts</h6>
+                    <h2 class="fw-bold mb-0" id="stat-high">0</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm rounded-4 h-100 hover-lift">
+                <div class="card-body p-4 text-center">
+                    <div class="icon-shape bg-soft-warning text-warning rounded-circle mb-3 mx-auto">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h6 class="text-muted small text-uppercase fw-bold mb-1">Avg Risk Score</h6>
+                    <h2 class="fw-bold mb-0" id="stat-avg">0%</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md">
+            <div class="card border-0 shadow-sm rounded-4 h-100 hover-lift">
+                <div class="card-body p-4 text-center">
+                    <div class="icon-shape bg-soft-info text-info rounded-circle mb-3 mx-auto">
+                        <i class="fas fa-microscope"></i>
+                    </div>
+                    <h6 class="text-muted small text-uppercase fw-bold mb-1">Avg HbA1c Level</h6>
+                    <h2 class="fw-bold mb-0" id="stat-hba1c">0</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md">
+            <div class="card border-0 shadow-sm rounded-4 h-100 hover-lift">
+                <div class="card-body p-4 text-center">
+                    <div class="icon-shape bg-soft-success text-success rounded-circle mb-3 mx-auto"
+                        id="status-icon-bg">
+                        <i class="fas fa-check-circle" id="status-icon"></i>
+                    </div>
+                    <h6 class="text-muted small text-uppercase fw-bold mb-1">System Health</h6>
+                    <h2 class="fw-bold mb-0 fs-5" id="stat-status">Optimal</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alerts and Charts -->
+    <div class="row g-4 mb-5 animate-fade-in-up delay-2">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h5 class="fw-bold mb-0">Risk Distribution</h5>
+                        <div class="small text-muted"><i class="fas fa-info-circle me-1"></i>Population Analysis</div>
+                    </div>
+                    <div id="riskChart" style="height: 350px;"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-header bg-white border-0 pt-4 px-4">
+                    <h5 class="fw-bold mb-0"><i class="fas fa-bell text-warning me-2"></i>Critical Insights</h5>
+                </div>
+                <div class="card-body p-4">
+                    <div id="alerts-list">
+                        <div class="text-center py-5">
+                            <i class="fas fa-check-circle text-soft-success fs-1 mb-3"></i>
+                            <p class="text-muted small">All systems normal. No critical alerts found.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Demographic Analytics -->
+    <div class="row g-4 mb-5 animate-fade-in-up delay-3">
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold mb-4">Age Distribution</h5>
+                    <div id="ageChart" style="height: 300px;"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold mb-4">Family History of Diabetes</h5>
+                    <div id="familyChart" style="height: 300px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Clinical Distribution Analysis -->
+    <div class="row g-4 mb-5 animate-fade-in-up delay-4">
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-body p-4">
+                    <h6 class="fw-bold mb-3 text-muted">Glucose Distribution</h6>
+                    <div id="glucoseChart" style="height: 250px;"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-body p-4">
+                    <h6 class="fw-bold mb-3 text-muted">BP Systolic Analysis</h6>
+                    <div id="bpChart" style="height: 250px;"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-body p-4">
+                    <h6 class="fw-bold mb-3 text-muted">Physical Activity (min)</h6>
+                    <div id="activityChart" style="height: 250px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row g-4 mb-5 animate-fade-in-up delay-2">
+        <div class="col-12">
+            <div class="card border-0 shadow-lg rounded-4 overflow-hidden bg-primary text-white">
+                <div class="card-body p-5 d-flex justify-content-between align-items-center">
+                    <div>
+                        <h2 class="fw-bold mb-2">Patient Management</h2>
+                        <p class="mb-0 opacity-75">View detailed records, risk histories, and manage patient profiles.
+                        </p>
+                    </div>
+                    <a href="/admin/patients"
+                        class="btn btn-light btn-lg rounded-pill px-5 fw-bold text-primary shadow-sm hover-scale">
+                        <i class="fas fa-users-medical me-2"></i>Go to Management
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .hover-lift {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .hover-lift:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.1) !important;
+    }
+
+    .badge-high {
+        background-color: #dc3545;
+    }
+
+    .badge-medium {
+        background-color: #ffc107;
+        color: #000;
+    }
+
+    .badge-low {
+        background-color: #28a745;
+    }
+
+    .badge-none {
+        background-color: #6c757d;
+    }
+
+    .bg-soft-primary {
+        background-color: rgba(13, 110, 253, 0.1);
+    }
+
+    .bg-soft-danger {
+        background-color: rgba(220, 53, 69, 0.1);
+    }
+
+    .bg-soft-warning {
+        background-color: rgba(255, 193, 7, 0.1);
+    }
+
+    .bg-soft-success {
+        background-color: rgba(40, 167, 69, 0.1);
+    }
+
+    .icon-shape {
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+    }
+</style>
+
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", refreshData);
+
+    async function refreshData() {
+        try {
+            const response = await fetch('/api/admin/patients');
+            const data = await response.json();
+
+            // 1. Update KPIs
+            document.getElementById('stat-total').innerText = data.stats.total_patients;
+            document.getElementById('stat-high').innerText = data.stats.high_risk_count;
+            document.getElementById('stat-avg').innerText = data.stats.avg_risk + '%';
+            document.getElementById('stat-hba1c').innerText = data.stats.avg_hba1c;
+            document.getElementById('stat-status').innerText = data.stats.system_status;
+
+            const statusIcon = document.getElementById('status-icon');
+            const statusBg = document.getElementById('status-icon-bg');
+            if (data.stats.status_class === 'danger') {
+                statusIcon.className = 'fas fa-exclamation-circle';
+                statusBg.className = 'icon-shape bg-soft-danger text-danger rounded-circle mb-3 mx-auto';
+            } else if (data.stats.status_class === 'warning') {
+                statusIcon.className = 'fas fa-exclamation-triangle';
+                statusBg.className = 'icon-shape bg-soft-warning text-warning rounded-circle mb-3 mx-auto';
+            } else {
+                statusIcon.className = 'fas fa-check-circle';
+                statusBg.className = 'icon-shape bg-soft-success text-success rounded-circle mb-3 mx-auto';
+            }
+
+            // 2. Update Alerts
+            const alertsList = document.getElementById('alerts-list');
+            if (data.alerts && data.alerts.length > 0) {
+                alertsList.innerHTML = '';
+                data.alerts.forEach(alert => {
+                    const alertDiv = document.createElement('div');
+                    alertDiv.className = `alert alert-${alert.class} border-0 rounded-4 mb-3 p-3 d-flex align-items-center shadow-sm`;
+                    alertDiv.innerHTML = `
+                        <div class="me-3">
+                            <i class="fas fa-user-circle fs-4"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <div class="fw-bold small text-dark">${alert.patient}</div>
+                            <div class="small text-muted">${alert.type}: <span class="fw-bold">${alert.value}</span></div>
+                        </div>
+                        <div>
+                            <span class="badge bg-${alert.class} rounded-pill px-2">Active</span>
+                        </div>
+                    `;
+                    alertsList.appendChild(alertDiv);
+                });
+            }
+
+            // 3. Update Chart
+            const chartData = [{
+                values: data.charts.risk_dist.values,
+                labels: data.charts.risk_dist.labels,
+                type: 'pie',
+                hole: .4,
+                textinfo: 'label+percent',
+                insidetextorientation: 'radial',
+                marker: {
+                    colors: ['#dc3545', '#ffc107', '#28a745', '#6c757d']
+                }
+            }];
+            const layout = {
+                margin: { l: 20, r: 20, b: 20, t: 20 },
+                showlegend: true,
+                legend: { orientation: 'h', y: -0.1 },
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                plot_bgcolor: 'rgba(0,0,0,0)'
+            };
+            Plotly.newPlot('riskChart', chartData, layout, { displayModeBar: false });
+
+            // 4. Age Chart
+            const ageData = [{
+                x: data.charts.age_dist.labels,
+                y: data.charts.age_dist.values,
+                type: 'bar',
+                marker: { color: '#0d6efd' }
+            }];
+            Plotly.newPlot('ageChart', ageData, {
+                margin: { l: 40, r: 20, b: 40, t: 10 },
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                plot_bgcolor: 'rgba(0,0,0,0)'
+            }, { displayModeBar: false });
+
+            // 5. Family History Chart
+            const familyData = [{
+                labels: data.charts.family_history.labels,
+                values: data.charts.family_history.values,
+                type: 'pie',
+                hole: .4,
+                marker: { colors: ['#ffc107', '#6c757d'] }
+            }];
+            Plotly.newPlot('familyChart', familyData, {
+                margin: { l: 20, r: 20, b: 20, t: 20 },
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                plot_bgcolor: 'rgba(0,0,0,0)'
+            }, { displayModeBar: false });
+
+            // 6. Clinical Feature Distributions
+            const commonLayout = {
+                margin: { l: 30, r: 10, b: 30, t: 10 },
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                plot_bgcolor: 'rgba(0,0,0,0)',
+                bargap: 0.1
+            };
+
+            const glucoseData = [{
+                x: data.charts.clinical_distributions.glucose,
+                type: 'histogram',
+                marker: { color: '#ffc107' }
+            }];
+            Plotly.newPlot('glucoseChart', glucoseData, commonLayout, { displayModeBar: false });
+
+            const bpData = [{
+                y: data.charts.clinical_distributions.bp_systolic,
+                type: 'box',
+                marker: { color: '#dc3545' },
+                name: 'Systolic'
+            }];
+            Plotly.newPlot('bpChart', bpData, commonLayout, { displayModeBar: false });
+
+            const activityData = [{
+                x: data.charts.clinical_distributions.activity,
+                type: 'histogram',
+                marker: { color: '#198754' }
+            }];
+            Plotly.newPlot('activityChart', activityData, commonLayout, { displayModeBar: false });
+
+        } catch (error) {
+            console.error('Error fetching admin data:', error);
+        }
+    }
+</script>
+{% endblock %}
