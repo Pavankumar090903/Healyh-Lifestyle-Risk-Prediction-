@@ -8,6 +8,8 @@ plotly
 google-generativeai
 gunicorn
 python-dotenv
-catboost
+catboost==1.2.7
+scikit-learn
+
 
 
