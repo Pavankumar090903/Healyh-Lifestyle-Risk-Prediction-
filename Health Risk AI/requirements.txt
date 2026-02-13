@@ -1,0 +1,13 @@
+﻿flask
+flask-sqlalchemy
+flask-login
+pandas
+numpy
+joblib
+plotly
+google-generativeai
+gunicorn
+python-dotenv
+catboost
+
+

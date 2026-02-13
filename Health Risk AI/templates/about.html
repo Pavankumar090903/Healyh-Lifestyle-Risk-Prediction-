@@ -1,0 +1,202 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+<!-- Hero Section -->
+<div class="hero-section text-center">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="h2 fw-bold mb-4 text-dark animate-fade-in-up" style="opacity: 0;">AI-Powered Diabetes
+                    Risk Prediction and Wellness Analytics
+                </h1>
+                <p class="lead text-muted mb-4 animate-fade-in-up delay-1" style="opacity: 0;">
+                    Experience clinical-grade AI that translates complex medical data into clear, actionable health
+                    insights, empowering you to understand and manage your diabetes risk with confidence.
+                </p>
+                <div class="d-flex justify-content-center gap-3 animate-fade-in-up delay-2" style="opacity: 0;">
+                    <a href="/predict" class="btn btn-primary btn-lg px-4 rounded-pill">Try Prediction Model</a>
+                    <a href="/dashboard" class="btn btn-outline-secondary btn-lg px-4 rounded-pill">View Analytics</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Core Pillars Section -->
+<div class="container mb-5">
+    <div class="row g-4">
+        <!-- Vision -->
+        <div class="col-md-4">
+            <div class="feature-card hover-lift">
+                <div class="icon-box">
+                    <i class="fas fa-bullseye"></i>
+                </div>
+                <h3 class="h4 fw-bold mb-3">Our Vision</h3>
+                <p class="text-muted mb-0">
+                    To democratize access to early health screening specifically for diabetes, utilizing the power of
+                    historical data to potential future risks before they become critical.
+                </p>
+            </div>
+        </div>
+
+        <!-- Technology -->
+        <div class="col-md-4">
+            <div class="feature-card hover-lift">
+                <div class="icon-box bg-success bg-opacity-10 text-success">
+                    <i class="fas fa-microchip"></i>
+                </div>
+                <h3 class="h4 fw-bold mb-3">Model Precision</h3>
+                <p class="text-muted mb-0">
+                    Powered by <strong>CatBoost</strong>, a high-performance gradient boosting library, our model
+                    effectively handles categorical data and delivers robust predictions with verified accuracy.
+                </p>
+            </div>
+        </div>
+
+        <!-- Insights -->
+        <div class="col-md-4">
+            <div class="feature-card hover-lift">
+                <div class="icon-box bg-warning bg-opacity-10 text-warning">
+                    <i class="fas fa-chart-pie"></i>
+                </div>
+                <h3 class="h4 fw-bold mb-3">Data Insights</h3>
+                <p class="text-muted mb-0">
+                    Beyond simple prediction, our platform visualizes your health metrics against standard benchmarks,
+                    offering a clear "impact analysis" of your lifestyle choices.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Technical Implementation -->
+<div class="container py-5 border-top">
+    <div class="row">
+        <!-- Tech Stack Card -->
+        <div class="col-lg-4 mb-4 mb-lg-0">
+            <div class="feature-card h-100 hover-lift">
+                <h3 class="h4 fw-bold mb-3"><i class="fas fa-layer-group text-primary me-2"></i>Technical Architecture
+                </h3>
+                <p class="text-muted mb-4">
+                    This application is built on a modern Python stack, prioritizing speed, maintainability, and data
+                    security. The architecture follows a modular design pattern separating the ML inference engine from
+                    the web presentation layer.
+                </p>
+                <div class="d-flex flex-wrap gap-2">
+                    <span class="tech-pill"><i class="fab fa-python text-warning"></i> Python 3.9+</span>
+                    <span class="tech-pill"><i class="fas fa-server text-secondary"></i> Flask</span>
+                    <span class="tech-pill"><i class="fas fa-rocket text-danger"></i> CatBoost</span>
+                    <span class="tech-pill"><i class="fas fa-table text-primary"></i> Pandas</span>
+                    <span class="tech-pill"><i class="fas fa-cubes text-info"></i> NumPy</span>
+                    <span class="tech-pill"><i class="fas fa-chart-area text-danger"></i> Matplotlib</span>
+                    <span class="tech-pill"><i class="fas fa-chart-bar text-success"></i> Seaborn</span>
+                    <span class="tech-pill"><i class="fas fa-chart-line text-info"></i> Plotly</span>
+                    <span class="tech-pill"><i class="fab fa-html5 text-danger"></i> HTML</span>
+                    <span class="tech-pill"><i class="fab fa-css3-alt text-primary"></i> CSS</span>
+                    <span class="tech-pill"><i class="fab fa-bootstrap text-primary"></i> Bootstrap 5</span>
+                    <span class="tech-pill"><i class="fas fa-box-open text-secondary"></i> Joblib</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Data Pipeline Card (Card Style) -->
+        <div class="col-lg-8">
+            <div class="feature-card h-100 hover-lift">
+                <h5 class="fw-bold mb-3"><i class="fas fa-network-wired text-primary me-2"></i>Data Pipeline Flow</h5>
+                <p class="text-muted mb-4">
+                    Our advanced data pipeline transforms raw patient inputs into actionable health insights through a
+                    verified, multi-stage machine learning process.
+                </p>
+
+                <div class="d-flex flex-column gap-3">
+                    <!-- Step 1 -->
+                    <div class="card p-3 border-0 shadow-sm bg-light hover-lift">
+                        <div class="d-flex align-items-start">
+                            <div class="me-3 text-primary mt-1"><i class="fas fa-keyboard fa-2x"></i></div>
+                            <div>
+                                <h6 class="fw-bold text-dark mb-1">Input Processing</h6>
+                                <p class="text-muted mb-0 small">User form data is cleaned, typed, and validated against
+                                    clinical ranges to ensure data quality.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="card p-3 border-0 shadow-sm bg-light hover-lift">
+                        <div class="d-flex align-items-start">
+                            <div class="me-3 text-secondary mt-1"><i class="fas fa-cogs fa-2x"></i></div>
+                            <div>
+                                <h6 class="fw-bold text-dark mb-1">Feature Engineering</h6>
+                                <p class="text-muted mb-0 small">Missing values are imputed using median statistical
+                                    logic; categorical variables are encoded.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="card p-3 border-0 shadow-sm bg-light hover-lift">
+                        <div class="d-flex align-items-start">
+                            <div class="me-3 text-danger mt-1"><i class="fas fa-microchip fa-2x"></i></div>
+                            <div>
+                                <h6 class="fw-bold text-dark mb-1">Inference Engine</h6>
+                                <p class="text-muted mb-0 small">The pre-trained CatBoost model calculates real-time
+                                    probability scores for Low, Medium, and High risk classes.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 4 -->
+                    <div class="card p-3 border-0 shadow-sm bg-light hover-lift">
+                        <div class="d-flex align-items-start">
+                            <div class="me-3 text-warning mt-1"><i class="fas fa-file-medical-alt fa-2x"></i></div>
+                            <div>
+                                <h6 class="fw-bold text-dark mb-1">Alerts & Recommendations</h6>
+                                <p class="text-muted mb-0 small">System applies thresholds to generate customized health
+                                    alerts and actionable lifestyle recommendations.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 5 -->
+                    <div class="card p-3 border-0 shadow-sm bg-light hover-lift">
+                        <div class="d-flex align-items-start">
+                            <div class="me-3 text-success mt-1"><i class="fas fa-chart-pie fa-2x"></i></div>
+                            <div>
+                                <h6 class="fw-bold text-dark mb-1">Visualization</h6>
+                                <p class="text-muted mb-0 small">Risk scores are mapped to a 0-100 scale and dynamically
+                                    rendered into interactive gauge and bar charts.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 6 -->
+                    <div class="card p-3 border-0 shadow-sm bg-light hover-lift">
+                        <div class="d-flex align-items-start">
+                            <div class="me-3 text-info mt-1"><i class="fas fa-heart-pulse fa-2x"></i></div>
+                            <div>
+                                <h6 class="fw-bold text-dark mb-1">Wellness Analytics Dashboard</h6>
+                                <p class="text-muted mb-0 small">Comprehensive health & lifestyle risk prediction
+                                    offering actionable insights for holistic well-being.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer CTA -->
+<div class="container py-5">
+    <div class="text-white rounded-3 p-5 text-center"
+        style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); box-shadow: 0 10px 20px rgba(118, 75, 162, 0.25);">
+        <h2 class="fw-bold mb-3">Empower Your Health Decisions</h2>
+        <p class="lead mb-4 opacity-75">Leverage clinical-grade AI to assess your risk profile instantly.</p>
+        <a href="/predict" class="btn btn-light btn-lg px-5 rounded-pill fw-bold text-primary shadow-sm">Launch
+            Diagnostic Tool</a>
+    </div>
+</div>
+
+{% endblock %}
