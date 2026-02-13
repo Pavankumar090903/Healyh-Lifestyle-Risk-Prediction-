@@ -1,0 +1,190 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-4 px-md-5">
+    <!-- Header -->
+    <div class="mb-4 animate-fade-in-up">
+        <a href="/admin/patients" class="btn btn-outline-secondary rounded-pill px-4 mb-3 hover-scale">
+            <i class="fas fa-arrow-left me-2"></i>Back to Patient List
+        </a>
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h1 class="fw-bold text-dark mb-1">Patient Profile: {{ patient.name }}</h1>
+                <p class="text-muted mb-0"><i class="fas fa-envelope me-2"></i>{{ patient.email }}</p>
+            </div>
+            <div class="text-end">
+                <span class="badge bg-primary rounded-pill px-3 py-2 fw-bold">PATIENT ID: #{{ patient.id }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Patient Stats Cards -->
+    <div class="row g-4 mb-5 animate-fade-in-up delay-1" id="patient-stats-summary">
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm rounded-4 p-4 text-center h-100 hover-lift">
+                <h6 class="text-uppercase text-muted fw-bold small mb-3">Current Risk</h6>
+                <h3 class="fw-bold mb-0" id="current-risk-label">--</h3>
+                <div id="current-risk-badge" class="mt-2"></div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm rounded-4 p-4 text-center h-100 hover-lift">
+                <h6 class="text-uppercase text-muted fw-bold small mb-3">Total Assessments</h6>
+                <h3 class="fw-bold mb-0" id="total-assessments">--</h3>
+                <p class="text-muted small mb-0 mt-2">Historical records</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm rounded-4 p-4 text-center h-100 hover-lift">
+                <h6 class="text-uppercase text-muted fw-bold small mb-3">Latest Score</h6>
+                <h3 class="fw-bold mb-0" id="latest-score">--%</h3>
+                <p class="text-muted small mb-0 mt-2">Clinical evaluation</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm rounded-4 p-4 text-center h-100 hover-lift">
+                <h6 class="text-uppercase text-muted fw-bold small mb-3">Last Visit</h6>
+                <h3 class="fw-bold text-primary mb-0" id="last-visit-date" style="font-size: 1.1rem;">--</h3>
+                <p class="text-muted small mb-0 mt-2">Activity date</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Health History Chart -->
+    <div class="card border-0 shadow-lg rounded-4 overflow-hidden mb-5 animate-fade-in-up delay-2">
+        <div class="card-header bg-white border-bottom p-4">
+            <h5 class="fw-bold mb-0"><i class="fas fa-chart-line text-primary me-2"></i>Risk Trend Analysis</h5>
+        </div>
+        <div class="card-body p-4">
+            <div id="riskTrendChart" style="height: 400px; width: 100%;"></div>
+        </div>
+    </div>
+
+    <!-- All Records Table -->
+    <div class="card border-0 shadow-lg rounded-4 overflow-hidden animate-fade-in-up delay-3">
+        <div class="card-header bg-white border-bottom p-4">
+            <h5 class="fw-bold mb-0"><i class="fas fa-list-ul text-primary me-2"></i>Complete Prediction Records</h5>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="bg-light text-muted small text-uppercase">
+                        <tr>
+                            <th class="ps-4 py-3 border-0">Timestamp</th>
+                            <th class="py-3 border-0 text-center">Risk Label</th>
+                            <th class="py-3 border-0 text-center">Score</th>
+                            <th class="py-3 border-0 text-center">BMI</th>
+                            <th class="py-3 border-0 text-center">HbA1c</th>
+                            <th class="py-3 border-0 text-center">Glucose</th>
+                            <th class="pe-4 py-3 border-0 text-center">BP</th>
+                        </tr>
+                    </thead>
+                    <tbody id="history-table-body">
+                        <!-- Filled by script -->
+                    </tbody>
+                </table>
+            </div>
+            <div id="no-history-msg" class="text-center py-5 d-none">
+                <i class="fas fa-folder-open fa-3x text-muted mb-3"></i>
+                <h5 class="fw-bold text-muted">No records found for this patient</h5>
+            </div>
+        </div>
+    </div>
+    <div id="patient-meta" data-id="{{ patient.id }}"></div>
+</div>
+
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const userId = document.getElementById('patient-meta').dataset.id;
+        console.log("Detail view loaded for patient:", userId);
+        fetchPatientHistory(userId);
+    });
+
+    async function fetchPatientHistory(userId) {
+        try {
+            console.log("Fetching history for user:", userId);
+            const response = await fetch(`/api/admin/patient/${userId}/history`);
+            const data = await response.json();
+            console.log("History data received:", data);
+
+            if (data.history && data.history.length > 0) {
+                updateSummary(data.history);
+                renderTrendChart(data.history);
+                renderHistoryTable(data.history);
+            } else {
+                console.log("No history records found.");
+                document.getElementById('no-history-msg').classList.remove('d-none');
+            }
+        } catch (error) {
+            console.error('Error fetching patient history:', error);
+        }
+    }
+
+    function updateSummary(history) {
+        if (!history || history.length === 0) return;
+        const latest = history[history.length - 1];
+
+        document.getElementById('current-risk-label').innerText = latest.risk_label;
+        document.getElementById('latest-score').innerText = latest.risk_score + '%';
+        document.getElementById('total-assessments').innerText = history.length;
+        document.getElementById('last-visit-date').innerText = latest.timestamp.split(' ')[0];
+
+        const badge = document.getElementById('current-risk-badge');
+        const color = latest.risk_label === 'High' ? 'danger' : (latest.risk_label === 'Medium' ? 'warning text-dark' : 'success');
+        badge.innerHTML = `<span class="badge bg-${color} rounded-pill px-3 py-2 fw-bold text-uppercase">${latest.risk_label} Status</span>`;
+    }
+
+    function renderTrendChart(history) {
+        if (!history || history.length === 0) return;
+
+        const trace = {
+            x: history.map(h => h.timestamp),
+            y: history.map(h => h.risk_score),
+            type: 'scatter',
+            mode: 'lines+markers',
+            line: { shape: 'spline', color: '#0d6efd', width: 3 },
+            marker: {
+                size: 10,
+                color: history.map(h => h.risk_label === 'High' ? '#dc3545' : (h.risk_label === 'Medium' ? '#ffc107' : '#28a745')),
+                line: { color: 'white', width: 2 }
+            },
+            fill: 'tozeroy',
+            fillcolor: 'rgba(13, 110, 253, 0.05)',
+            hovertemplate: '<b>Score: %{y}%</b><br>Date: %{x}<extra></extra>'
+        };
+
+        const layout = {
+            margin: { l: 50, r: 30, t: 20, b: 50 },
+            xaxis: { showgrid: false, title: 'Assessment Date' },
+            yaxis: { range: [0, 105], title: 'Risk Score (%)', gridcolor: '#f0f0f0' },
+            hovermode: 'closest',
+            paper_bgcolor: 'rgba(0,0,0,0)',
+            plot_bgcolor: 'rgba(0,0,0,0)'
+        };
+
+        Plotly.newPlot('riskTrendChart', [trace], layout, { responsive: true, displayModeBar: false });
+    }
+
+    function renderHistoryTable(history) {
+        const tbody = document.getElementById('history-table-body');
+        if (!tbody) return;
+
+        const reversedHistory = [...history].reverse();
+        tbody.innerHTML = reversedHistory.map(h => {
+            const riskColor = h.risk_label === 'High' ? 'text-danger' : (h.risk_label === 'Medium' ? 'text-warning' : 'text-success');
+            return `
+                <tr>
+                    <td class="ps-4 py-3 fw-bold text-dark">${h.timestamp}</td>
+                    <td class="py-3 text-center fw-bold ${riskColor}">${h.risk_label}</td>
+                    <td class="py-3 text-center fw-bold">${h.risk_score}%</td>
+                    <td class="py-3 text-center text-muted">${h.bmi}</td>
+                    <td class="py-3 text-center text-muted">${h.hba1c}</td>
+                    <td class="py-3 text-center text-muted">${h.glucose}</td>
+                    <td class="pe-4 py-3 text-center text-muted small">${h.bp}</td>
+                </tr>
+            `;
+        }).join('');
+    }
+</script>
+{% endblock %}
