@@ -2,17 +2,7 @@
   <h1 align="center">🩺 Health Risk AI</h1>
   <p align="center">
     <strong>AI-Powered Diabetes Risk Prediction & Wellness Analytics Platform</strong>
-  </p>
-  <p align="center">
-    <a href="https://health-project-health-risk-ai.hf.space/">
-      <img src="https://img.shields.io/badge/🚀_Live_Demo-Hugging_Face-yellow?style=for-the-badge" alt="Live Demo">
-    </a>
-    <img src="https://img.shields.io/badge/Python-3.9-blue?style=for-the-badge&logo=python&logoColor=white" alt="Python">
-    <img src="https://img.shields.io/badge/Flask-3.0-green?style=for-the-badge&logo=flask&logoColor=white" alt="Flask">
-    <img src="https://img.shields.io/badge/CatBoost-ML-orange?style=for-the-badge" alt="CatBoost">
-    <img src="https://img.shields.io/badge/Gemini_AI-Chatbot-purple?style=for-the-badge&logo=google&logoColor=white" alt="Gemini">
-    <img src="https://img.shields.io/badge/Docker-Deployed-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker">
-  </p>
+  
 </p>
 
 ---
@@ -417,18 +407,4 @@ Contributions are welcome! Here's how:
 
 This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
 
----
-
-## 👤 Author
-
-**PavanKumar630**
-
-- Hugging Face: [@PavanKumar630](https://huggingface.co/PavanKumar630)
-- Project: [Health-Project/health-risk-ai](https://huggingface.co/spaces/Health-Project/health-risk-ai)
-
----
-
-<p align="center">
-  <b>⭐ If you found this project helpful, please give it a star! ⭐</b>
-</p>
 
