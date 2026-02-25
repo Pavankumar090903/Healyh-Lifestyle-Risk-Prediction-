@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center py-5">
+    <div class="col-md-5">
+        <div class="card shadow-lg border-0 rounded-4">
+            <div class="card-body p-5">
+                <div class="text-center mb-4">
+                    <div class="icon-box mx-auto bg-primary bg-opacity-10 text-primary rounded-circle"
+                        style="width: 70px; height: 70px;">
+                        <i class="fas fa-user-plus fa-2x"></i>
+                    </div>
+                    <h2 class="fw-bold mt-3">Join HealthRisk AI</h2>
+                    <p class="text-muted">Create an account to start your assessment</p>
+                </div>
+
+                {% if error %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="fas fa-exclamation-circle me-2"></i> {{ error }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endif %}
+
+                <form method="POST" action="/signup">
+                    <div class="mb-3">
+                        <label for="name" class="form-label fw-bold">Full Name</label>
+                        <input type="text" name="name" class="form-control rounded-pill px-4 py-2" id="name"
+                            placeholder="John Doe" required autocomplete="name">
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label fw-bold">Email Address</label>
+                        <input type="email" name="email" class="form-control rounded-pill px-4 py-2" id="email"
+                            placeholder="john@example.com" required autocomplete="email">
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label fw-bold">Password</label>
+                        <div class="input-group">
+                            <input type="password" name="password" class="form-control rounded-start-pill ps-4 py-2"
+                                id="password" placeholder="••••••••" required autocomplete="new-password"
+                                title="Must contain at least 8 characters, one number, and one special character.">
+                            <button class="btn btn-outline-secondary rounded-end-pill px-3" type="button"
+                                id="togglePassword">
+                                <i class="fas fa-eye" id="eyeIcon"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <input type="hidden" name="role" value="patient">
+
+
+
+                    <button type="submit" class="btn btn-primary w-100 rounded-pill py-2 fw-bold shadow-sm">Create
+                        Account</button>
+                </form>
+
+                <div class="text-center mt-4">
+                    <p class="mb-0 text-muted small">Already have an account? <a href="/login"
+                            class="text-primary text-decoration-none fw-bold">Sign in here</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const togglePassword = document.querySelector('#togglePassword');
+        const password = document.querySelector('#password');
+        const eyeIcon = document.querySelector('#eyeIcon');
+
+        togglePassword.addEventListener('click', function (e) {
+            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+            eyeIcon.classList.toggle('fa-eye');
+            eyeIcon.classList.toggle('fa-eye-slash');
+        });
+    });
+</script>
+{% endblock %}
