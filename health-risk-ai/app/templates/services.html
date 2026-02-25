@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="hero-section text-center">
+    <div class="container overflow-hidden">
+        <h6 class="text-primary text-uppercase fw-bold tracking-wider mb-2 animate-fade-in-up"
+            style="letter-spacing: 3px; opacity: 0;">Diagnostic Excellence</h6>
+        <h1 class="display-4 fw-bold text-dark mb-4 staggered-title">
+            <span>O</span><span>u</span><span>r</span>
+            <span>S</span><span>e</span><span>r</span><span>v</span><span>i</span><span>c</span><span>e</span><span>s</span>
+        </h1>
+        <p class="lead text-muted mb-4 mx-auto col-lg-8 animate-fade-in-up delay-1" style="opacity: 0;">
+            Explore our specialized suite of AI-driven diagnostic services designed for high-precision health monitoring
+            and clinical intelligence.
+        </p>
+    </div>
+</div>
+
+<style>
+    .staggered-title span {
+        display: inline-block;
+        opacity: 0;
+        transform: translateY(20px);
+        animation: staggerFadeIn 0.5s ease forwards;
+    }
+
+    @keyframes staggerFadeIn {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .staggered-title span:nth-child(1) {
+        animation-delay: 0.10s;
+    }
+
+    .staggered-title span:nth-child(2) {
+        animation-delay: 0.15s;
+    }
+
+    .staggered-title span:nth-child(3) {
+        animation-delay: 0.20s;
+    }
+
+    .staggered-title span:nth-child(4) {
+        animation-delay: 0.25s;
+    }
+
+    .staggered-title span:nth-child(5) {
+        animation-delay: 0.30s;
+    }
+
+    .staggered-title span:nth-child(6) {
+        animation-delay: 0.35s;
+    }
+
+    .staggered-title span:nth-child(7) {
+        animation-delay: 0.40s;
+    }
+
+    .staggered-title span:nth-child(8) {
+        animation-delay: 0.45s;
+    }
+
+    .staggered-title span:nth-child(9) {
+        animation-delay: 0.50s;
+    }
+
+    .staggered-title span:nth-child(10) {
+        animation-delay: 0.55s;
+    }
+
+    .staggered-title span:nth-child(11) {
+        animation-delay: 0.60s;
+    }
+</style>
+
+<div class="container mb-5">
+    <div class="row g-4 justify-content-center">
+        <div class="col-lg-4 col-md-6">
+            <div class="feature-card hover-lift h-100">
+                <div class="icon-box mb-4" style="background: rgba(13, 110, 253, 0.1); color: #0d6efd;">
+                    <i class="bi bi-cpu-fill"></i>
+                </div>
+                <h4 class="fw-bold text-dark mb-3">Data &amp; AI Logic</h4>
+                <p class="text-muted mb-0">Integration of high-fidelity clinical datasets with advanced machine learning
+                    algorithms to ensure every diagnostic output is grounded in verified medical logic.</p>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6">
+            <div class="feature-card hover-lift h-100">
+                <div class="icon-box mb-4" style="background: rgba(13, 202, 240, 0.1); color: #0dcaf0;">
+                    <i class="bi bi-speedometer2"></i>
+                </div>
+                <h4 class="fw-bold text-dark mb-3">Risk Profiling</h4>
+                <p class="text-muted mb-0">Instant categorization of health profiles into professional Low, Medium, or
+                    High risk tiers using multi-dimensional feature extraction and biomarker mapping.</p>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6">
+            <div class="feature-card hover-lift h-100">
+                <div class="icon-box mb-4" style="background: rgba(255, 193, 7, 0.1); color: #ffc107;">
+                    <i class="bi bi-graph-up-arrow"></i>
+                </div>
+                <h4 class="fw-bold text-dark mb-3">Diagnostic Insights</h4>
+                <p class="text-muted mb-0">Individual data visualization through specialized health charts, providing a
+                    deep-dive into your personal biometrics and lifestyle impact factors.</p>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6">
+            <div class="feature-card hover-lift h-100">
+                <div class="icon-box mb-4" style="background: rgba(33, 37, 41, 0.1); color: #212529;">
+                    <i class="bi bi-kanban"></i>
+                </div>
+                <h4 class="fw-bold text-dark mb-3">Clinical Analytics Suite</h4>
+                <p class="text-muted mb-0">Full access to our interactive health analytics platform for
+                    deep-dive monitoring and global clinical trend identification.</p>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6">
+            <div class="feature-card hover-lift h-100"
+                style="border: 1px solid rgba(13, 110, 253, 0.2) !important; background: linear-gradient(145deg, #ffffff, #fafdff);">
+                <div class="icon-box mb-4" style="background: rgba(25, 135, 84, 0.1); color: #198754;">
+                    <i class="bi bi-journal-medical"></i>
+                </div>
+                <h4 class="fw-bold text-dark mb-3">Strategic Roadmap</h4>
+                <p class="text-muted mb-0">Consolidation of diagnostic findings into professional health dossiers,
+                    featuring clinical alerts, recommendations, and actionable assessment summaries.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center mt-5 pt-4">
+        <a href="/predict" class="btn btn-primary btn-lg rounded-pill px-5 py-3 fw-bold shadow-sm">Access Our
+            Services</a>
+    </div>
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+{% endblock %}
