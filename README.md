@@ -187,14 +187,9 @@ health-risk-ai/
 │   │   └── admin_patient_detail.html  # Individual patient profile
 │   │
 │   └── static/                   # Static assets
-│       └── images/               # Background images
-│           ├── login_bg.png
-│           └── welcome_bg.png
-│
-└── docs/                         # Project documentation
-    ├── Project_Documentation.html  # Complete line-by-line code explanation
-    ├── QA_Viva_Guide.html          # 80 Q&A for viva/interviews
-    └── Deployment_Guide.html       # Cloud deployment + Git commands guide
+       └── images/               # Background images
+           ├── login_bg.png
+           └── welcome_bg.png
 ```
 
 ---
@@ -436,3 +431,4 @@ This project is licensed under the **MIT License** — see the [LICENSE](LICENSE
 <p align="center">
   <b>⭐ If you found this project helpful, please give it a star! ⭐</b>
 </p>
+
