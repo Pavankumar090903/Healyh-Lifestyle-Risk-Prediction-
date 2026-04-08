@@ -340,20 +340,6 @@ The application is deployed using **Docker** on **Hugging Face Spaces**.
 
 ---
 
-## 📚 Documentation
-
-Detailed documentation is available in the `docs/` folder:
-
-| Document | Content |
-|----------|---------|
-| [Project Documentation](docs/Project_Documentation.html) | Complete line-by-line code explanation for all 20+ files |
-| [Q&A Viva Guide](docs/QA_Viva_Guide.html) | 80 questions with answers (Basic, Advanced, Critical, Logical) |
-| [Deployment Guide](docs/Deployment_Guide.html) | Cloud deployment steps, Git commands, troubleshooting |
-
-> Open any `.html` file in your browser → Press `Ctrl + P` → Save as PDF
-
----
-
 ## 🗄️ Database Schema
 
 ```sql
